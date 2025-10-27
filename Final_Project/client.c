@@ -220,10 +220,16 @@ void show_user_menu(int sockfd, struct sockaddr_in *servaddr)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     int sockfd;
     struct sockaddr_in servaddr;
+
+    if (argc != 2)
+    {
+        fprintf(stderr, "Usage: %s <server_ip>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0)
@@ -236,7 +242,7 @@ int main()
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
     // servaddr.sin_addr.s_addr = INADDR_ANY;
-    if (inet_pton(AF_INET, "172.18.37.45", &servaddr.sin_addr) <= 0)
+    if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
     {
         perror("Invalid address / Address not supported");
         exit(EXIT_FAILURE);
